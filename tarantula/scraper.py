@@ -38,6 +38,8 @@ class ScraperTask:
         self.folder = output_folder
         self.headers = headers
 
+        assure_folder_exists(output_folder)
+
     def name(self):
         if len(self.params.keys()) > 0:
             params_name = "_".join([key + "_" + value for key, value in zip(self.params.keys(), self.params.values()) ])
@@ -70,7 +72,6 @@ def get_tasks(url, output_folder, params_and_values={}, method="get", headers={}
 
 
 def scrape(url, output_folder, params_and_values={}, method="get", headers={}, workers=5, f=do_nothing):
-    assure_folder_exists(output_folder)
     tasks = get_tasks(url=url, output_folder=output_folder, params_and_values=params_and_values, method=method, headers=headers)
     scrape_tasks(tasks, workers=workers, f=f)
     failed_tasks = len(tasks) - len(get_files_in_folder(output_folder))
