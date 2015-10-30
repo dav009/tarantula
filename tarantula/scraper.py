@@ -3,8 +3,8 @@ import codecs
 from multiprocessing import Pool, Value
 import os
 
-import resolver
-from utils import combine_parameters
+import tarantula.resolver as resolver
+from tarantula.utils import combine_parameters, assure_folder_exists, remove_file, get_files_in_folder
 
 logger = logging.getLogger("tarantula")
 
@@ -20,6 +20,7 @@ def scraper_worker(scraper_task, f):
         output.close()
         logger.info("Finished task %s" % (scraper_task.filename()))
     except Exception as e:
+        remove_file(scraper_task.filename())
         infoline = "Scraper task  %s failed with: %s"%(scraper_task.filename(), e)
         logger.error(infoline)
         print(infoline)
@@ -69,8 +70,11 @@ def get_tasks(url, output_folder, params_and_values={}, method="get", headers={}
 
 
 def scrape(url, output_folder, params_and_values={}, method="get", headers={}, workers=5, f=do_nothing):
+    assure_folder_exists(output_folder)
     tasks = get_tasks(url=url, output_folder=output_folder, params_and_values=params_and_values, method=method, headers=headers)
     scrape_tasks(tasks, workers=workers, f=f)
+    failed_tasks = len(tasks) - len(get_files_in_folder(output_folder))
+    return failed_tasks
 
 
 def scrape_tasks(list_of_tasks, workers=5, f=do_nothing):

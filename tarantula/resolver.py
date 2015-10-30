@@ -1,5 +1,5 @@
 import requests
-from errors import NotResolved
+from tarantula.errors import NotResolved
 
 requests_methods = {
     "post": requests.post,

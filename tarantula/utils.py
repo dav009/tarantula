@@ -1,5 +1,5 @@
 import itertools
-from os import listdir, path
+from os import listdir, path, makedirs
 
 '''
 takes a dictionary of
@@ -37,3 +37,13 @@ def get_input_output_pairs(path_to_folder, output_folder):
     filtered_files_in_folder = get_files_in_folder(path_to_folder)
     input_output_pairs = [(path.join(path_to_folder, f), path.join(output_folder, f)) for f in filtered_files_in_folder]
     return input_output_pairs
+
+def assure_folder_exists(filepath):
+    if not path.exists(filepath):
+        makedirs(filepath)
+
+def remove_file(filepath):
+    try:
+        os.remove(filepath)
+    except Exception:
+        pass

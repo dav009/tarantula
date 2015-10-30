@@ -3,7 +3,7 @@ import os
 from multiprocessing import Pool, Value
 from os import listdir
 
-from utils import get_input_output_pairs
+from tarantula.utils import get_input_output_pairs, assure_folder_exists, remove_file
 
 import logging
 
@@ -33,13 +33,19 @@ class ParseTask:
         self.output_file = path_to_output_file
 
     def execute(self):
-        extracted_data = self.extract()
-        output = codecs.open(self.output_file, 'w', 'utf-8')
-        output.write(extracted_data)
-        output.close()
+        try:
+            extracted_data = self.extract()
+            output = codecs.open(self.output_file, 'w', 'utf-8')
+            output.write(extracted_data)
+            output.close()
+        except Exception as e:
+            remove_file(self.output_file)
+            logger.error("Error while parsing %s -- %s"%(self.path, e))
+
 
     def extract(self):
-        return self.parser.extract(self.path)
+        parsed_object = self.parser.parse(self.path)
+        return self.parser.extract(parsed_object)
 
 
 def parser_worker(parser_task):
@@ -47,6 +53,7 @@ def parser_worker(parser_task):
 
 
 def parser(input_folder, output_folder, parser, workers=5):
+    assure_folder_exists(output_folder)
     pool = Pool(workers)
     input_output_pairs = get_input_output_pairs(input_folder, output_folder)
     tasks = list([ParseTask(input_file_name, output_file_name, parser) for input_file_name, output_file_name in input_output_pairs])
