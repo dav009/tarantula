@@ -4,7 +4,7 @@ import itertools
 
 from lxml.cssselect import CSSSelector
 
-from tarantula.scraper import ScraperTask, scrape_tasks, scrape
+from tarantula.scraper import scrape
 from tarantula.parser import parse
 from tarantula.parsers.html import HtmlParser
 from tarantula.utils import join_json
