@@ -9,7 +9,7 @@ Tarantula es un scraper+parser para descargar los datos de esos sitios y convert
 - Python3.4
 
 ## Instalacion
-- `pip install -r requirements.txt`
+- `sudo pip install git+git://github.com/dav009/tarantula.git`
 
 
 ## Ejemplo
