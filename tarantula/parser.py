@@ -52,7 +52,7 @@ def parser_worker(parser_task):
     parser_task.execute()
 
 
-def parser(input_folder, output_folder, parser, workers=5):
+def parse(input_folder, output_folder, parser, workers=5):
     assure_folder_exists(output_folder)
     pool = Pool(workers)
     input_output_pairs = get_input_output_pairs(input_folder, output_folder)

@@ -1,11 +1,10 @@
 import json
 import logging
 
-
 from lxml.cssselect import CSSSelector
 
 from tarantula.scraper import ScraperTask, scrape_tasks, scrape
-from tarantula.parser import parser
+from tarantula.parser import parse
 from tarantula.parsers.html import HtmlParser
 
 logging.basicConfig(level=logging.INFO,
@@ -46,9 +45,9 @@ def get_registraduria_with_params():
 
 
   print("scraping registraduria...")
-  scrape(url, output_folder=scrape_data_folder, params_and_values=params)
+  scrape(url, output_folder=scrape_data_folder, params_and_values=params, workers=10)
   print("parsing registraduria..")
-  parser(input_folder=scrape_data_folder, output_folder=extracted_data_folder, parser=SampleHTMLParser(), workers=8)
+  parse(input_folder=scrape_data_folder, output_folder=extracted_data_folder, parser=SampleHTMLParser(), workers=8)
 
 
 def just_scrape_tasks_in_list():
