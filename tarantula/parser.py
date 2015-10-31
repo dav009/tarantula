@@ -60,6 +60,5 @@ def parse(input_folder, output_folder, parser, workers=5):
     
     info_line = "Parsing  %s tasks with %s workers"%(len(tasks), workers)
     logger.info(info_line)
-    print(info_line)
     
     pool.map(parser_worker, tasks)

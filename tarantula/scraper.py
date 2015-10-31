@@ -23,7 +23,6 @@ def scraper_worker(scraper_task, f):
         remove_file(scraper_task.filename())
         infoline = "Scraper task  %s failed with: %s"%(scraper_task.filename(), e)
         logger.error(infoline)
-        print(infoline)
     counter.value += 1
     if (counter.value % 1000) == 0:
         print("done %s...\r" % (counter.value))
@@ -57,7 +56,6 @@ class Scraper:
         pool = Pool(workers)
         info_line = "Scraping  %s tasks with %s workers"%(len(list_of_tasks), workers)
         logger.info(info_line)
-        print(info_line)
         tasks = list([(scraper_task, f) for scraper_task in list_of_tasks])
         pool.starmap(scraper_worker, tasks)
 
