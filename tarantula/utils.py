@@ -1,3 +1,5 @@
+import codecs
+import json
 import itertools
 from os import listdir, path, makedirs
 
@@ -47,3 +49,22 @@ def remove_file(filepath):
         os.remove(filepath)
     except Exception:
         pass
+
+def join_files_in_folder(path_to_folder, f):
+    result = list()
+    for filename in get_files_in_folder(path_to_folder):
+        complete_file_path = path.join(path_to_folder, filename)
+        result.append(f(complete_file_path))
+    return result
+
+def join_json(path_to_folder):
+
+    def load_json(path_to_file):
+        f = codecs.open(path_to_file, 'r', 'utf-8')
+        json_object = json.loads("\n".join([line for line in f]))
+        f.close()
+        return json_object
+
+    return join_files_in_folder(path_to_folder, load_json)
+
+
